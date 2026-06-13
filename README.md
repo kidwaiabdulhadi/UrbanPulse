@@ -16,9 +16,6 @@
 *An AI-powered Predictive Transit Intelligence Platform combining Digital Twin simulations,*  
 *LangGraph agentic reasoning, and crowd-aware commuter routing.*
 
-<br/>
-
-[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-urbanpulse--ai--tawny.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://urbanpulse-ai-tawny.vercel.app)
 
 <br/>
 
