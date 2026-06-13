@@ -161,7 +161,7 @@ UrbanPulse AI is built on a **microservices architecture** with the following te
 - [Live Demo](https://urbanpulse.vercel.app)
 - [Documentation](https://github.com/your-org/urbanpulse-ai#readme)
 - [Report a Bug](https://github.com/your-org/urbanpulse-ai/issues)
-- [Report a Vulnerability](mailto:security@urbanpulse.ai)
+- [Report a Vulnerability](mailto:a.hadikidwai@gmail.com)
 
 ---
 

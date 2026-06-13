@@ -186,7 +186,7 @@ Self-hosted deployment on any VPS (DigitalOcean, Hetzner, AWS EC2, etc.).
 
 ```bash
 # On your server
-git clone https://github.com/yourusername/urbanpulse-ai.git
+git clone https://github.com/kidwaiabdulhadi/urbanpulse-ai.git
 cd urbanpulse-ai
 
 # Configure environment
