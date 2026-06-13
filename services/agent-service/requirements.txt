@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+langchain
+langchain-openai
+langgraph
+pydantic
+python-dotenv
+httpx
+qdrant-client
+chromadb
+langchain-chroma

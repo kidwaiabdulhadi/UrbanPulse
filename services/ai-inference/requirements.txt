@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+torch
+pytorch-lightning
+pytorch-forecasting
+mlflow
+pandas
+numpy
+scikit-learn
+psycopg2-binary
+sqlalchemy
+python-dotenv

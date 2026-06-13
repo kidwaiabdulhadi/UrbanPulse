@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL + TimescaleDB
+  db:
+    image: timescale/timescaledb:latest-pg14
+    container_name: urbanpulse_db
+    environment:
+      POSTGRES_USER: urbanpulse_admin
+      POSTGRES_PASSWORD: secure_password
+      POSTGRES_DB: urbanpulse
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U urbanpulse_admin"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Redis (Message Broker & Cache)
+  redis:
+    image: redis:7-alpine
+    container_name: urbanpulse_redis
+    ports:
+      - "6379:6379"
+
+  # 3. Core API Service (Ingestion & Auth)
+  core-api:
+    build:
+      context: ./services/core-api
+    container_name: urbanpulse_core_api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://urbanpulse_admin:secure_password@db:5432/urbanpulse
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # 4. AI Inference Service (PyTorch & Forecasting)
+  ai-inference:
+    build:
+      context: ./services/ai-inference
+    container_name: urbanpulse_ai_inference
+    ports:
+      - "8002:8000"
+    environment:
+      - DATABASE_URL=postgresql://urbanpulse_admin:secure_password@db:5432/urbanpulse
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # 5. Agentic AI Service (LangGraph & RAG)
+  agent-service:
+    build:
+      context: ./services/agent-service
+    container_name: urbanpulse_agent_service
+    ports:
+      - "8003:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-mock-key}
+      - CORE_API_URL=http://core-api:8000/api/v1
+      - AI_INFERENCE_URL=http://ai-inference:8000/api/v1
+    depends_on:
+      - core-api
+      - ai-inference
+
+  # 6. Next.js Frontend Dashboard
+  frontend:
+    build:
+      context: ./frontend
+    container_name: urbanpulse_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_CORE_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_AGENT_API_URL=http://localhost:8003
+      - NEXT_PUBLIC_MAPBOX_TOKEN=${NEXT_PUBLIC_MAPBOX_TOKEN:-dummy}
+    depends_on:
+      - core-api
+
+volumes:
+  timescale_data:
